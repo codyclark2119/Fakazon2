@@ -89,12 +89,16 @@ class Signup extends React.Component {
                   />
                 </Form.Group>
                 <Button
+                  disabled={!(this.state.email && this.state.password)}
                   onClick={this.handleFormSubmit}
                   variant="primary"
                   type="submit"
                 >
                   Submit
                 </Button>
+                <Form.Text className="text-muted">
+                  Have an account? <a href="/login">Log In!</a>
+                </Form.Text>
               </Form>
             </Jumbotron>
           </Col>

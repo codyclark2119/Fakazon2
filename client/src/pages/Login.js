@@ -57,13 +57,18 @@ class Login extends React.Component {
                     placeholder="Password"
                   />
                 </Form.Group>
+
                 <Button
+                  disabled={!(this.state.email && this.state.password)}
                   onClick={this.handleFormSubmit}
                   variant="primary"
                   type="submit"
                 >
                   Submit
                 </Button>
+                <Form.Text className="text-muted">
+                  Dont have an account? <a href="/signup">Sign Up!</a>
+                </Form.Text>
               </Form>
             </Jumbotron>
           </Col>
