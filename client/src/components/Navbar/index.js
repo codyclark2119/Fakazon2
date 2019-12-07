@@ -19,7 +19,9 @@ const NavBar = ({ auth: { isAuthenticated, loading }, logout }, props) => {
       <Nav className='mr-auto'>
         <Nav.Link href='/'>Shop</Nav.Link>
         <Nav.Link href='/dashboard'>Dashboard</Nav.Link>
-        <Nav.Link onClick={logout}>Logout</Nav.Link>
+        <Nav.Link onClick={logout} href='#'>
+          Logout
+        </Nav.Link>
       </Nav>
     </Navbar.Collapse>
   );
