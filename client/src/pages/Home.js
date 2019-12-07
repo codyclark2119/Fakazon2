@@ -9,7 +9,9 @@ class Home extends React.Component {
   componentDidMount() {
     API.getItems().then(res => {
       let products = [];
-      res.data.forEach(item => products.push(item));
+      console.log(res.data);
+      let items = res.data;
+      items.forEach(item => products.push(item));
       this.setState({ products: [...products] });
       console.log(this.state.products);
     });
@@ -27,9 +29,9 @@ class Home extends React.Component {
     console.log(event.target.value);
     API.categorySearch({ query: event.target.value })
       .then(res => {
-        console.log(res);
         let products = [];
-        res.data.forEach(item => products.push(item));
+        let items = res.data;
+        items.forEach(item => products.push(item));
         this.setState({ products: [...products] });
       })
 
@@ -40,9 +42,8 @@ class Home extends React.Component {
     console.log(this.state.userQuery);
     API.itemSearch({ query: this.state.userQuery })
       .then(res => {
-        console.log(res);
         let products = [];
-        let items = JSON.parse(res.data);
+        let items = res.data;
         items.forEach(item => products.push(item));
         this.setState({ products: [...products] });
       })
