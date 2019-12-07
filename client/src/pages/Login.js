@@ -1,76 +1,86 @@
-import React from "react";
-import { Col, Row, Container, Jumbotron, Form, Button } from "react-bootstrap";
-import API from "../utils/API";
+import React, { useState } from 'react';
+import { Col, Row, Container, Jumbotron, Form, Button } from 'react-bootstrap';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../actions/auth';
 
-class Login extends React.Component {
-  state = {
-    email: "",
-    password: ""
+const Login = ({ login, isAuthenticated }) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const { email, password } = formData;
+
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
+    e.preventDefault();
+    login(email, password);
   };
 
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleFormSubmit = event => {
-    event.preventDefault();
-
-    API.login({
-      email: this.state.email,
-      password: this.state.password
-    })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-  };
-
-  render() {
-    return (
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col md="8">
-            <Jumbotron>
-              <Form>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    value={this.state.email}
-                    onChange={this.handleInputChange}
-                    name="email"
-                    type="input"
-                    placeholder="Enter email"
-                  />
-                  <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                  </Form.Text>
-                </Form.Group>
-
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    value={this.state.password}
-                    onChange={this.handleInputChange}
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                  />
-                </Form.Group>
-                <Button
-                  onClick={this.handleFormSubmit}
-                  variant="primary"
-                  type="submit"
-                >
-                  Submit
-                </Button>
-              </Form>
-            </Jumbotron>
-          </Col>
-        </Row>
-      </Container>
-    );
+  if (isAuthenticated) {
+    return <Redirect to='/' />;
   }
-}
+  return (
+    <Container>
+      <Row className='justify-content-md-center'>
+        <Col md='8'>
+          <Jumbotron>
+            <Form>
+              <Form.Group controlId='formBasicEmail'>
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  value={email}
+                  onChange={e => onChange(e)}
+                  name='email'
+                  type='input'
+                  placeholder='Enter email'
+                />
+                <Form.Text className='text-muted'>
+                  We'll never share your email with anyone else.
+                </Form.Text>
+              </Form.Group>
 
-export default Login;
+              <Form.Group controlId='formBasicPassword'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  value={password}
+                  onChange={e => onChange(e)}
+                  name='password'
+                  type='password'
+                  placeholder='Password'
+                />
+              </Form.Group>
+
+              <Button
+                disabled={!(email && password)}
+                onClick={e => onSubmit(e)}
+                variant='primary'
+                type='submit'
+              >
+                Submit
+              </Button>
+              <Form.Text className='text-muted'>
+                Dont have an account? <Link to='/signup'>Sign Up!</Link>
+              </Form.Text>
+            </Form>
+          </Jumbotron>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { login })(Login);
