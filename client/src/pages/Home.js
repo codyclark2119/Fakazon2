@@ -1,11 +1,11 @@
-import React from "react";
-import { Col, Row, Container, Jumbotron, Spinner } from "react-bootstrap";
-import Navbar from "../components/Navbar";
-import Product from "../components/Product";
-import API from "../utils/API";
+import React from 'react';
+import { Col, Row, Container, Jumbotron, Spinner } from 'react-bootstrap';
+import Navbar from '../components/Navbar';
+import Product from '../components/Product';
+import API from '../utils/API';
 
 class Home extends React.Component {
-  state = { products: [], userQuery: "", category: "" };
+  state = { products: [], userQuery: '', category: '' };
   componentDidMount() {
     API.getItems().then(res => {
       let products = [];
@@ -42,14 +42,15 @@ class Home extends React.Component {
       .then(res => {
         console.log(res);
         let products = [];
-        res.data.forEach(item => products.push(item));
+        let items = JSON.parse(res.data);
+        items.forEach(item => products.push(item));
         this.setState({ products: [...products] });
       })
 
       .catch(err => console.log(err));
 
     this.setState({
-      userQuery: ""
+      userQuery: ''
     });
   };
 
@@ -64,9 +65,9 @@ class Home extends React.Component {
           userQuery={this.state.userQuery}
         />
         <Row>
-          <Col md="12">
+          <Col md='12'>
             <Jumbotron>
-              <Row className="justify-content-md-center">
+              <Row className='justify-content-md-center'>
                 {this.state.products.length ? (
                   this.state.products.map(product => (
                     <Product
@@ -80,11 +81,11 @@ class Home extends React.Component {
                   ))
                 ) : (
                   <Jumbotron>
-                    <Spinner animation="border" variant="success" role="status">
-                      <span className="sr-only">Loading...</span>
+                    <Spinner animation='border' variant='success' role='status'>
+                      <span className='sr-only'>Loading...</span>
                     </Spinner>
                   </Jumbotron>
-                )}{" "}
+                )}{' '}
               </Row>
             </Jumbotron>
           </Col>
