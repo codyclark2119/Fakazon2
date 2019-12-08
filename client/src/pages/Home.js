@@ -1,6 +1,16 @@
 import React from 'react';
-import { Col, Row, Container, Jumbotron, Spinner } from 'react-bootstrap';
-import Navbar from '../components/Navbar';
+import {
+  Col,
+  Row,
+  Container,
+  Jumbotron,
+  Spinner,
+  Button,
+  FormControl,
+  DropdownButton,
+  InputGroup,
+  Dropdown
+} from 'react-bootstrap';
 import Product from '../components/Product';
 import API from '../utils/API';
 
@@ -58,13 +68,61 @@ class Home extends React.Component {
   render() {
     return (
       <Container fluid>
-        <Navbar
-          category={this.state.category}
-          categorySearch={this.categorySearch}
-          userSearch={this.userSearch}
-          handleInputChange={this.handleInputChange}
-          userQuery={this.state.userQuery}
-        />
+        <Row>
+          <InputGroup>
+            <DropdownButton
+              as={InputGroup.Prepend}
+              variant='outline-secondary'
+              title='Categories'
+              id='input-group-dropdown-1'
+            >
+              <Dropdown.Item
+                name='category'
+                value='books'
+                onClick={event => this.categorySearch(event)}
+                as='button'
+                type='submit'
+              >
+                Books
+              </Dropdown.Item>
+              <Dropdown.Item
+                name='category'
+                value='video games'
+                onClick={event => this.categorySearch(event)}
+                as='button'
+              >
+                Video Games
+              </Dropdown.Item>
+              <Dropdown.Item
+                name='category'
+                value='electronics'
+                onClick={event => this.categorySearch(event)}
+                as='button'
+              >
+                Electronics
+              </Dropdown.Item>
+              <Dropdown.Item
+                name='category'
+                value='clothes'
+                onClick={event => this.categorySearch(event)}
+                as='button'
+              >
+                Clothes
+              </Dropdown.Item>
+            </DropdownButton>
+            <FormControl
+              name='userQuery'
+              value={this.userQuery}
+              onChange={this.handleInputChange}
+              aria-describedby='basic-addon1'
+            />
+            <InputGroup.Append>
+              <Button variant='outline-secondary' onClick={this.userSearch}>
+                Search
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </Row>
         <Row>
           <Col md='12'>
             <Jumbotron>
