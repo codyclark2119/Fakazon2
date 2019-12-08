@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
 
-const NavBar = ({ auth: { isAuthenticated, loading }, logout }, props) => {
+const NavBar = (props, { auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
     <Navbar.Collapse id='basic-navbar-nav'>
       <Nav className='mr-auto'>
