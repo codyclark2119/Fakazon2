@@ -1,22 +1,22 @@
-const router = require("express").Router();
-const db = require("../../models");
-const bcrypt = require("bcrypt");
-const auth = require("../../middleware/auth");
-const jwt = require("jsonwebtoken");
-const { check, validationResult } = require("express-validator/check");
+const router = require('express').Router();
+const db = require('../../models');
+const bcrypt = require('bcrypt');
+const auth = require('../../middleware/auth');
+const jwt = require('jsonwebtoken');
+const { check, validationResult } = require('express-validator/check');
 
 router
-  .route("/")
+  .route('/')
   // @route    GET api/users
   // @desc     Test route
   // @access   Public
   .get(auth, async (req, res) => {
     try {
-      const user = await db.User.findById(req.user.id).select("-password");
+      const user = await db.User.findById(req.user.id).select('-password');
       res.json(user);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   })
   // @route    POST api/users
@@ -24,13 +24,13 @@ router
   // @access   Public
   .post(
     [
-      check("username", "Username is required")
+      check('username', 'Username is required')
         .not()
         .isEmpty(),
-      check("email", "Please include a valid email").isEmail(),
+      check('email', 'Please include a valid email').isEmail(),
       check(
-        "password",
-        "Please enter a password with 6 or more characters"
+        'password',
+        'Please enter a password with 6 or more characters'
       ).isLength({ min: 6 })
     ],
     async (req, res) => {
@@ -38,7 +38,7 @@ router
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { username, email, password } = req.body;
+      const { username, email, password } = JSON.parse(req.body);
 
       try {
         let user = await db.User.findOne({ email });
@@ -46,7 +46,7 @@ router
         if (user) {
           return res
             .status(400)
-            .json({ errors: [{ msg: "User already exists" }] });
+            .json({ errors: [{ msg: 'User already exists' }] });
         }
 
         user = {
@@ -79,7 +79,7 @@ router
           .catch(err => res.status(422).json(err));
       } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server error");
+        res.status(500).send('Server error');
       }
     }
   )
@@ -101,7 +101,7 @@ router
       res.json(profile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   })
   // @route    Delete api/users/
@@ -112,16 +112,16 @@ router
       // Remove user
       await db.User.findOneAndRemove({ _id: req.user.id });
 
-      res.json({ msg: "User deleted" });
+      res.json({ msg: 'User deleted' });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   });
 
 // Matches with "/api/users/:id"
 router
-  .route("/:id")
+  .route('/:id')
   // @route    Get api/users/:id
   // @desc     Get user
   // @access   Private
@@ -129,17 +129,17 @@ router
     try {
       const profile = await db.User.findOne({
         _id: req.params.id
-      }).select(["-password", "-dateAdded", "-email"]);
+      }).select(['-password', '-dateAdded', '-email']);
 
-      if (!profile) return res.status(400).json({ msg: "Profile not found" });
+      if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 
       res.json(profile);
     } catch (err) {
       console.error(err.message);
-      if (err.kind == "ObjectId") {
-        return res.status(400).json({ msg: "User not found" });
+      if (err.kind == 'ObjectId') {
+        return res.status(400).json({ msg: 'User not found' });
       }
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   });
 
@@ -147,31 +147,31 @@ router
 // @desc     Authenticate user & get token
 // @access   Public
 router
-  .route("/login")
+  .route('/login')
   .post(
     [
-      check("email", "Please include a valid email").isEmail(),
-      check("password", "Password is required").exists()
+      check('email', 'Please include a valid email').isEmail(),
+      check('password', 'Password is required').exists()
     ],
     async (req, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { email, password } = req.body;
+      const { email, password } = JSON.parse(req.body);
       try {
         let user = await db.User.findOne({ email: email });
         if (!user) {
           return res
             .status(400)
-            .json({ errors: [{ msg: "Invalid Credentials" }] });
+            .json({ errors: [{ msg: 'Invalid Credentials' }] });
         }
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
           return res
             .status(400)
-            .json({ errors: [{ msg: "Invalid Credentials" }] });
+            .json({ errors: [{ msg: 'Invalid Credentials' }] });
         }
         const payload = {
           user: {
@@ -190,7 +190,7 @@ router
         );
       } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server error");
+        res.status(500).send('Server error');
       }
     }
   );

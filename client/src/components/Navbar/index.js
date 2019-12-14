@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 
+
 const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
     <Navbar.Collapse id="basic-navbar-nav">
@@ -31,6 +32,7 @@ const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
       <Container>
         <Navbar.Brand href="/">Fakazon</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
         {!loading && (
           <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
         )}

@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Col,
   Row,
@@ -12,6 +13,7 @@ import {
 } from "react-bootstrap";
 import Product from "../components/Product";
 import API from "../utils/API";
+
 
 class Home extends React.Component {
   state = { products: [], userQuery: "", category: "" };
@@ -122,6 +124,7 @@ class Home extends React.Component {
                 </Button>
               </InputGroup.Append>
             </InputGroup>
+
           </Col>
         </Row>
         <Row className="mt-3 justify-content-md-center">

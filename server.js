@@ -12,12 +12,7 @@ app.use(express.json());
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '../client/build/index.html'));
-  });
+  app.use(express.static('client/build'));
 }
 // Including the routes
 app.use(routes);
