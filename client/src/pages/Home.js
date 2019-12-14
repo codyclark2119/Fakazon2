@@ -14,17 +14,14 @@ import {
 import Product from "../components/Product";
 import API from "../utils/API";
 
-
 class Home extends React.Component {
   state = { products: [], userQuery: "", category: "" };
   componentDidMount() {
     API.getItems().then(res => {
       let products = [];
-      console.log(res.data);
       let items = res.data;
       items.forEach(item => products.push(item));
       this.setState({ products: [...products] });
-      console.log(this.state.products);
     });
   }
 
@@ -37,7 +34,6 @@ class Home extends React.Component {
 
   categorySearch = event => {
     event.preventDefault();
-    console.log(event.target.value);
     API.categorySearch({ query: event.target.value })
       .then(res => {
         let products = [];
@@ -50,7 +46,6 @@ class Home extends React.Component {
   };
 
   userSearch = () => {
-    console.log(this.state.userQuery);
     API.itemSearch({ query: this.state.userQuery })
       .then(res => {
         let products = [];
@@ -124,7 +119,6 @@ class Home extends React.Component {
                 </Button>
               </InputGroup.Append>
             </InputGroup>
-
           </Col>
         </Row>
         <Row className="mt-3 justify-content-md-center">
