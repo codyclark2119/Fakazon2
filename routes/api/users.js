@@ -38,7 +38,7 @@ router
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { username, email, password } = JSON.parse(req.body);
+      const { username, email, password } = req.body;
 
       try {
         let user = await db.User.findOne({ email });
@@ -158,7 +158,7 @@ router
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { email, password } = JSON.parse(req.body);
+      const { email, password } = req.body;
       try {
         let user = await db.User.findOne({ email: email });
         if (!user) {

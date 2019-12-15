@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const db = require("../../models");
+const router = require('express').Router();
+const db = require('../../models');
 
 // Matches with "/api/items"
 router
-  .route("/")
+  .route('/')
   .get(function(req, res) {
     db.Item.find(req.query)
       .sort({ dateAdded: -1 })
@@ -18,7 +18,7 @@ router
 
 // Matches with "/api/items/:id"
 router
-  .route("/:id")
+  .route('/:id')
   .get(function(req, res) {
     db.Item.findById(req.params.id)
       .then(dbModel => res.json(dbModel))
@@ -36,15 +36,15 @@ router
       .catch(err => res.status(422).json(err));
   });
 
-router.route("/search/").post(function(req, res) {
-  db.Item.find({ name: new RegExp(req.body.query, "i") })
+router.route('/search/').post(function(req, res) {
+  db.Item.find({ name: new RegExp(req.body.query, 'i') })
     .then(dbModel => {
       res.json(dbModel);
     })
     .catch(err => res.status(422).json(err));
 });
 
-router.route("/category/").post(function(req, res) {
+router.route('/category/').post(function(req, res) {
   db.Item.find({ category: req.body.query })
     .then(dbModel => {
       res.json(dbModel);

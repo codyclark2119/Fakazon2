@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   Col,
@@ -10,12 +10,12 @@ import {
   DropdownButton,
   InputGroup,
   Dropdown
-} from "react-bootstrap";
-import Product from "../components/Product";
-import API from "../utils/API";
+} from 'react-bootstrap';
+import Product from '../components/Product';
+import API from '../utils/API';
 
 class Home extends React.Component {
-  state = { products: [], userQuery: "", category: "" };
+  state = { products: [], userQuery: '', category: '' };
   componentDidMount() {
     API.getItems().then(res => {
       let products = [];
@@ -57,71 +57,71 @@ class Home extends React.Component {
       .catch(err => console.log(err));
 
     this.setState({
-      userQuery: ""
+      userQuery: ''
     });
   };
 
   render() {
     return (
       <Container>
-        <Row className="mt-3 justify-content-md-center">
-          <Col md="10">
+        <Row className='mt-3 justify-content-md-center'>
+          <Col md='10'>
             <InputGroup>
               <DropdownButton
                 as={InputGroup.Prepend}
-                variant="outline-secondary"
-                title="Categories"
-                id="input-group-dropdown-1"
+                variant='outline-secondary'
+                title='Categories'
+                id='input-group-dropdown-1'
               >
                 <Dropdown.Item
-                  name="category"
-                  value="books"
+                  name='category'
+                  value='books'
                   onClick={event => this.categorySearch(event)}
-                  as="button"
-                  type="submit"
+                  as='button'
+                  type='submit'
                 >
                   Books
                 </Dropdown.Item>
                 <Dropdown.Item
-                  name="category"
-                  value="video games"
+                  name='category'
+                  value='video games'
                   onClick={event => this.categorySearch(event)}
-                  as="button"
+                  as='button'
                 >
                   Video Games
                 </Dropdown.Item>
                 <Dropdown.Item
-                  name="category"
-                  value="electronics"
+                  name='category'
+                  value='electronics'
                   onClick={event => this.categorySearch(event)}
-                  as="button"
+                  as='button'
                 >
                   Electronics
                 </Dropdown.Item>
                 <Dropdown.Item
-                  name="category"
-                  value="clothes"
+                  name='category'
+                  value='clothes'
                   onClick={event => this.categorySearch(event)}
-                  as="button"
+                  as='button'
                 >
                   Clothes
                 </Dropdown.Item>
               </DropdownButton>
               <FormControl
-                name="userQuery"
+                name='userQuery'
                 value={this.userQuery}
                 onChange={this.handleInputChange}
-                aria-describedby="basic-addon1"
+                aria-describedby='basic-addon1'
               />
               <InputGroup.Append>
-                <Button variant="outline-secondary" onClick={this.userSearch}>
+                <Button variant='outline-secondary' onClick={this.userSearch}>
                   Search
                 </Button>
               </InputGroup.Append>
             </InputGroup>
           </Col>
         </Row>
-        <Row className="mt-3 justify-content-md-center">
+        <Row className='mt-3 justify-content-md-center'>
           {this.state.products.length ? (
             this.state.products.map(product => (
               <Product
@@ -134,10 +134,10 @@ class Home extends React.Component {
               />
             ))
           ) : (
-            <Spinner animation="border" variant="success" role="status">
-              <span className="sr-only">Loading...</span>
+            <Spinner animation='border' variant='success' role='status'>
+              <span className='sr-only'>Loading...</span>
             </Spinner>
-          )}{" "}
+          )}{' '}
         </Row>
       </Container>
     );
