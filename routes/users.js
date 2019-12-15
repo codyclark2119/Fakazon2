@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const db = require('../../models');
+const db = require('../models/user');
 const bcrypt = require('bcrypt');
-const auth = require('../../middleware/auth');
+const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 
 router
   .route('/')
