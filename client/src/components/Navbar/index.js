@@ -1,17 +1,18 @@
-import React, { Fragment } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { logout } from "../../actions/auth";
-
+import React, { Fragment } from 'react';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import Checkout from '../Checkout';
+import PropTypes from 'prop-types';
+import { logout } from '../../actions/auth';
 
 const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ml-auto">
-        <Nav.Link href="/">Shop</Nav.Link>
-        <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-        <Nav.Link onClick={logout} href="#">
+    <Navbar.Collapse id='basic-navbar-nav'>
+      <Nav className='ml-auto'>
+        <Nav.Link href='/'>Shop</Nav.Link>
+
+        <Checkout />
+        <Nav.Link onClick={logout} href='#'>
           Logout
         </Nav.Link>
       </Nav>
@@ -19,19 +20,19 @@ const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
   );
 
   const guestLinks = (
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ml-auto">
-        <Nav.Link href="/">Home</Nav.Link>
-        <Nav.Link href="/signup">Signup</Nav.Link>
-        <Nav.Link href="/login">Login</Nav.Link>
+    <Navbar.Collapse id='basic-navbar-nav'>
+      <Nav className='ml-auto'>
+        <Nav.Link href='/'>Home</Nav.Link>
+        <Nav.Link href='/signup'>Signup</Nav.Link>
+        <Nav.Link href='/login'>Login</Nav.Link>
       </Nav>
     </Navbar.Collapse>
   );
   return (
-    <Navbar static="top" expand="md" bg="dark" variant="dark">
+    <Navbar static='top' expand='md' bg='dark' variant='dark'>
       <Container>
-        <Navbar.Brand href="/">Fakazon</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Brand href='/'>Fakazon</Navbar.Brand>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' />
 
         {!loading && (
           <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>

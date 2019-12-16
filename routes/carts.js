@@ -9,7 +9,7 @@ const Cart = require('../models/cart');
 // @access   Private
 router.get('/me', auth, async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id }).populate('item');
+    const cart = await Cart.findOne({ user: req.user.id }).populate('items');
 
     if (!cart) {
       return res.status(400).json({ msg: 'There is no cart for this user' });
@@ -23,7 +23,10 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-router.post(
+// @route    PUT api/carts
+// @desc     Create/update cart
+// @access   Private
+router.put(
   '/',
   [
     auth,
@@ -39,21 +42,83 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { useritems } = req.body.items;
-    try {
-      const newCart = new Cart({
-        user: req.user.id,
-        items: [useritems]
-      });
+    const cart = await Cart.findOne({ user: req.user.id });
 
-      const cart = await newCart.save();
+    if (!cart) {
+      const useritems = req.body.items;
+      try {
+        const newCart = new Cart({
+          user: req.user.id,
+          items: useritems
+        });
 
-      res.json(cart);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
+        const cart = await newCart.save();
+
+        res.json(cart);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    } else {
+      try {
+        const item = req.body.items;
+        cart.items.push(item);
+        await cart.save();
+        const newCart = await Cart.findOne({ user: req.user.id }).populate(
+          'items'
+        );
+        res.json(newCart);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
     }
   }
 );
+
+// @route    DELETE api/carts/:id
+// @desc     Delete item by ID
+// @access   Private
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ user: req.user.id }).populate('items');
+
+    if (!cart) {
+      return res.status(400).json({ msg: 'There is no cart for this user' });
+    }
+    const item = cart.items.find(item => item.id === req.params.id);
+    if (!item) {
+      return res.status(400).json({ msg: 'There is no item in this cart' });
+    }
+    await item.remove();
+    const newCart = await Cart.findOne({ user: req.user.id }).populate('items');
+    res.json(newCart);
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route    DELETE api/carts/
+// @desc     Delete full cart
+// @access   Private
+router.delete('/', auth, async (req, res) => {
+  try {
+    const cart = await Cart.findOneAndDelete({ user: req.user.id }).populate(
+      'items'
+    );
+
+    if (!cart) {
+      return res.status(400).json({ msg: 'There is no cart for this user' });
+    }
+
+    res.json({ msg: 'Cart Deleted' });
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

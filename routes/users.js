@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../models/user');
+const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
@@ -12,7 +12,7 @@ router
   // @access   Public
   .get(auth, async (req, res) => {
     try {
-      const user = await db.User.findById(req.user.id).select('-password');
+      const user = await User.findById(req.user.id).select('-password');
       res.json(user);
     } catch (err) {
       console.error(err.message);
@@ -39,9 +39,9 @@ router
         return res.status(400).json({ errors: errors.array() });
       }
       const { username, email, password } = req.body;
-
+      console.log(email);
       try {
-        let user = await db.User.findOne({ email });
+        let user = await User.findOne({ email });
 
         if (user) {
           return res
@@ -58,7 +58,7 @@ router
         const salt = await bcrypt.genSalt(13);
         user.password = await bcrypt.hash(password, salt);
 
-        await db.User.create(user)
+        await User.create(user)
           .then(user => {
             const payload = {
               user: {
@@ -93,7 +93,7 @@ router
     }
     try {
       // Using upsert option (creates new doc if no match is found):
-      let profile = await db.User.findOneAndUpdate(
+      let profile = await User.findOneAndUpdate(
         { _id: req.user.id },
         { $set: req.body },
         { new: true, upsert: true }
@@ -110,7 +110,7 @@ router
   .delete(auth, async (req, res) => {
     try {
       // Remove user
-      await db.User.findOneAndRemove({ _id: req.user.id });
+      await User.findOneAndRemove({ _id: req.user.id });
 
       res.json({ msg: 'User deleted' });
     } catch (err) {
@@ -127,7 +127,7 @@ router
   // @access   Private
   .get(async (req, res) => {
     try {
-      const profile = await db.User.findOne({
+      const profile = await User.findOne({
         _id: req.params.id
       }).select(['-password', '-dateAdded', '-email']);
 
@@ -160,7 +160,7 @@ router
       }
       const { email, password } = req.body;
       try {
-        let user = await db.User.findOne({ email: email });
+        let user = await User.findOne({ email: email });
         if (!user) {
           return res
             .status(400)
