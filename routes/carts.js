@@ -9,8 +9,9 @@ const Cart = require('../models/cart');
 // @access   Private
 router.get('/me', auth, async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id }).populate('items');
-
+    const cart = await Cart.findOne({ user: req.user.id }).populate({
+      path: 'items.item'
+    });
     if (!cart) {
       return res.status(400).json({ msg: 'There is no cart for this user' });
     }
@@ -53,8 +54,16 @@ router.put(
         });
 
         const cart = await newCart.save();
-
-        res.json(cart);
+        if (cart){
+          const userCart = await Cart.findOne({ user: req.user.id }).populate({
+            path: 'items.item'
+          });
+          res.json(userCart);
+        }
+        else{
+          console.error(err.message);
+          res.status(500).send('Server Error');
+        }
       } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -64,9 +73,9 @@ router.put(
         const item = req.body.items;
         cart.items.push(item);
         await cart.save();
-        const newCart = await Cart.findOne({ user: req.user.id }).populate(
-          'items'
-        );
+        const newCart = await Cart.findOne({ user: req.user.id }).populate({
+          path: 'items.item'
+        });
         res.json(newCart);
       } catch (err) {
         console.error(err.message);

@@ -32,7 +32,7 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register User
-export const register = ({ username, email, password }) => async dispatch => {
+export const register = ( username, email, password ) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -40,7 +40,6 @@ export const register = ({ username, email, password }) => async dispatch => {
   };
 
   const body = JSON.stringify({ username, email, password });
-
   try {
     const res = await axios.post('/api/users', body, config);
 
@@ -51,12 +50,11 @@ export const register = ({ username, email, password }) => async dispatch => {
 
     dispatch(loadUser());
   } catch (err) {
-    // const errors = err.response.data.errors;
+    const errors = err.response.data.errors;
 
-    // if (errors) {
-    //   errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    // }
-    console.log(err);
+    if (errors) {
+      errors.forEach(error => console.log(error));
+    }
 
     dispatch({
       type: REGISTER_FAIL
@@ -84,12 +82,11 @@ export const login = (email, password) => async dispatch => {
 
     dispatch(loadUser());
   } catch (err) {
-    // const errors = err.response.data.errors;
+    const errors = err.response.data.errors;
 
-    // if (errors) {
-    //   errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    // }
-    console.log(err);
+    if (errors) {
+      errors.forEach(error => console.log(error));
+    }
 
     dispatch({
       type: LOGIN_FAIL

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db = require('../models');
+const Item = require('../models/item');
 
 // This file empties the Books collection and inserts the books below
 
@@ -242,8 +242,8 @@ const itemSeed = [
   }
 ];
 
-db.Item.remove({})
-  .then(() => db.Item.collection.insertMany(itemSeed))
+Item.remove({})
+  .then(() => Item.collection.insertMany(itemSeed))
   .then(data => {
     console.log(data.result.n + ' records inserted!');
     process.exit(0);
