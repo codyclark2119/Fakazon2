@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const auth = require('../middleware/auth');
+const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
-const Profile = require('../models/profile');
+const Profile = require('../../models/profile');
 
 // @route    GET api/profiles/me
 // @desc     Get current users profile

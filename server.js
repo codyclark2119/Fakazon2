@@ -20,10 +20,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Including the routes
-app.use('/api/users', require('./routes/users'));
-app.use('/api/carts', require('./routes/carts'));
-app.use('/api/items', require('./routes/items'));
-app.use('/api/profiles', require('./routes/profiles'));
+app.use(require('./routes/index.js'));
 
 // Setting up mongoose connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/fakazon');

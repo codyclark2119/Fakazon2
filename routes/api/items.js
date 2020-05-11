@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Item = require('../models/item');
+const Item = require('../../models/item');
 
 // Matches with "/api/items"
 router

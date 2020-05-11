@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const auth = require('../middleware/auth');
+const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
-const Cart = require('../models/cart');
+const Cart = require('../../models/cart');
 
 // @route    GET api/carts/me
 // @desc     Get cart by ID
@@ -55,9 +55,10 @@ router.put(
 
         const cart = await newCart.save();
         if (cart){
-          const userCart = await Cart.findOne({ user: req.user.id }).populate({
-            path: 'items.item'
-          });
+          const userCart = await Cart.findOne({ user: req.user.id })
+          // .populate({
+          //   path: 'items.item'
+          // });
           res.json(userCart);
         }
         else{
